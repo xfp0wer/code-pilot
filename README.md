@@ -1,10 +1,30 @@
-Code Pilot is a simple text editor built using Python and tkinter. It provides basic text editing functionalities along with line numbering and a welcome screen.
+To download and run Code Pilot from GitHub, follow these steps:
 
-Features
-Text Editing: Edit text with options for cut, copy, paste, undo, and redo.
-File Operations: Open, save, and save as functionalities for text files.
-Line Numbering: Displays line numbers alongside the text area.
-Welcome Screen: A welcome screen upon launching the application.
-Requirements
-Python 3.x
-tkinter (usually included with Python distributions)
+Clone the Repository:
+
+bash
+git clone <https://github.com/xfp0wer/code-pilot/>
+
+Navigate to the Project Directory:
+
+bash
+cd Code-Pilot
+Install Dependencies (if needed):
+Ensure you have Python 3.x installed on your system. Tkinter is usually included in standard Python installations.
+
+Run the Application:
+
+bash
+python code_pilot.py
+This command will start the Code Pilot text editor.
+
+Usage:
+
+Use the File menu to create new files, open existing files, save files, and exit the application.
+Utilize the Edit menu for standard text editing operations like cut, copy, paste, undo, and redo.
+Access the Help menu for information about the application and help content.
+
+Contributing:
+
+If you wish to contribute to this project, fork the repository, make your changes, and submit a pull request. Please discuss major changes by opening an issue first.
+
