@@ -8,8 +8,6 @@ class TextEditor:
         self.root = root
         self.root.title("Code Pilot")
         self.create_widgets()
-        self.create_menu()
-        self.create_welcome_page()
 
         # Initialize line numbers
         self.create_line_numbers()
@@ -20,6 +18,9 @@ class TextEditor:
         self.text_area.bind('<Return>', self.update_line_numbers)
         self.text_area.bind('<Delete>', self.update_line_numbers)
 
+        # Menu
+        self.create_menu()
+
     def create_widgets(self):
         # Create text area with Cascadia Code font
         self.text_area = tk.Text(self.root, wrap="word", undo=True, font=("Cascadia Code", 10))
@@ -29,48 +30,6 @@ class TextEditor:
         self.scrollbar = tk.Scrollbar(self.root, command=self.text_area.yview)
         self.scrollbar.pack(side="right", fill="y")
         self.text_area.config(yscrollcommand=self.scrollbar.set)
-
-
-    def create_menu(self):
-        self.menu_bar = tk.Menu(self.root)
-
-        # File menu
-        self.file_menu = tk.Menu(self.menu_bar, tearoff=False)
-        self.file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.new_file)
-        self.file_menu.add_command(label="New Window", accelerator="Ctrl+Shift+N", command=self.new_window)
-        self.file_menu.add_separator()
-        self.file_menu.add_command(label="Open...", accelerator="Ctrl+O", command=self.open_file)
-        self.file_menu.add_command(label="Save", accelerator="Ctrl+S", command=self.save_file)
-        self.file_menu.add_command(label="Save As...", command=self.save_as_file)
-        self.file_menu.add_separator()
-        self.file_menu.add_command(label="Exit", command=self.exit_app)
-        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
-
-        # Edit menu
-        self.edit_menu = tk.Menu(self.menu_bar, tearoff=False)
-        self.edit_menu.add_command(label="Cut", accelerator="Ctrl+X", command=self.cut)
-        self.edit_menu.add_command(label="Copy", accelerator="Ctrl+C", command=self.copy)
-        self.edit_menu.add_command(label="Paste", accelerator="Ctrl+V", command=self.paste)
-        self.edit_menu.add_separator()
-        self.edit_menu.add_command(label="Undo", accelerator="Ctrl+Z", command=self.text_area.edit_undo)
-        self.edit_menu.add_command(label="Redo", accelerator="Ctrl+Y", command=self.text_area.edit_redo)
-        self.menu_bar.add_cascade(label="Edit", menu=self.edit_menu)
-
-        # Help menu
-        self.help_menu = tk.Menu(self.menu_bar, tearoff=False)
-        self.help_menu.add_command(label="About", command=self.show_about)
-        self.help_menu.add_command(label="Help", command=self.open_help)
-        self.menu_bar.add_cascade(label="Help", menu=self.help_menu)
-
-        self.root.config(menu=self.menu_bar)
-
-    def create_welcome_page(self):
-        self.welcome_window = tk.Toplevel(self.root)
-        self.welcome_window.title("Welcome to Code Pilot")
-
-        label = tk.Label(self.welcome_window, text="Welcome to Code Pilot!", font=("Cascadia Code", 20))
-        label.pack(padx=20, pady=40)
-
 
     def create_line_numbers(self):
         self.line_number_area = tk.Text(self.root, width=4, wrap="none", state="disabled", bd=0)
@@ -112,11 +71,43 @@ class TextEditor:
         line_number_area_yview = self.line_number_area.yview()
         self.text_area.yview_moveto(line_number_area_yview[0])
 
+    def create_menu(self):
+        self.menu_bar = tk.Menu(self.root)
+
+        # File menu
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=False)
+        self.file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.new_file)
+        self.file_menu.add_command(label="New Window", accelerator="Ctrl+Shift+N", command=self.new_window)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Open...", accelerator="Ctrl+O", command=self.open_file)
+        self.file_menu.add_command(label="Save", accelerator="Ctrl+S", command=self.save_file)
+        self.file_menu.add_command(label="Save As...", command=self.save_as_file)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Exit", command=self.exit_app)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+
+        # Edit menu
+        self.edit_menu = tk.Menu(self.menu_bar, tearoff=False)
+        self.edit_menu.add_command(label="Cut", accelerator="Ctrl+X", command=self.cut)
+        self.edit_menu.add_command(label="Copy", accelerator="Ctrl+C", command=self.copy)
+        self.edit_menu.add_command(label="Paste", accelerator="Ctrl+V", command=self.paste)
+        self.edit_menu.add_separator()
+        self.edit_menu.add_command(label="Undo", accelerator="Ctrl+Z", command=self.text_area.edit_undo)
+        self.edit_menu.add_command(label="Redo", accelerator="Ctrl+Y", command=self.text_area.edit_redo)
+        self.menu_bar.add_cascade(label="Edit", menu=self.edit_menu)
+
+        # Help menu
+        self.help_menu = tk.Menu(self.menu_bar, tearoff=False)
+        self.help_menu.add_command(label="About", command=self.show_about)
+        self.help_menu.add_command(label="Help", command=self.open_help)
+        self.menu_bar.add_cascade(label="Help", menu=self.help_menu)
+
+        self.root.config(menu=self.menu_bar)
+
     def new_file(self):
         self.text_area.delete(1.0, tk.END)
         self.update_line_numbers()
         self.root.title("Code Pilot - Untitled")
-        self.close_welcome_page()
 
     def new_window(self):
         new_root = tk.Toplevel(self.root)
@@ -131,7 +122,6 @@ class TextEditor:
                     self.text_area.insert(1.0, file.read())
                     self.update_line_numbers()
                     self.root.title(f"Code Pilot - {file.name}")
-                    self.close_welcome_page()
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to open file: {str(e)}")
 
@@ -177,6 +167,7 @@ class TextEditor:
     def show_about(self):
         messagebox.showinfo("About", "Code Pilot\nBy: Rylynn J. Hynum\nCreated with Python")
 
+
 def main():
     root = tk.Tk()
     root.geometry("1025x725")
@@ -185,10 +176,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-    def create_welcome_page(self):
-        self.welcome_window = tk.Toplevel(self.root)
-        self.welcome_window.title("Welcome to Code Pilot")
-
-        label = tk.Label(self.welcome_window, text="Welcome to Code Pilot!", font=("Arial", 20))
-        label.pack(padx=20, pady=40)
